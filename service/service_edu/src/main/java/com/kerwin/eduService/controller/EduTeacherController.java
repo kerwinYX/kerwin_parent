@@ -24,6 +24,7 @@ import java.util.List;
  */
 @Api(tags = "讲师管理")
 @RestController
+@CrossOrigin
 @RequestMapping("/eduService/teacher")
 public class EduTeacherController {
 
@@ -60,15 +61,15 @@ public class EduTeacherController {
     public R pageListTeacher(@PathVariable("currentPage") long currentPage, @PathVariable long size) {
         Page<EduTeacher> pageTeacher = new Page<>(currentPage, size);
         //  不带条件
-
-
         teacherService.page(pageTeacher, null);
         long total = pageTeacher.getTotal();
         List<EduTeacher> list = pageTeacher.getRecords();
-//        Map<String, Object> map = new HashMap<>();
-//        map.put("total",total);
-//        map.put("teacherList",list);
-//        return R.ok().data(map);
+
+/*/
+        Map<String, Object> map = new HashMap<>();
+        map.put("total",total);
+        map.put("teacherList",list);
+        return R.ok().data(map);*/
 
         return R.ok().data("total", total).data("teacherList", list);
     }
@@ -91,19 +92,25 @@ public class EduTeacherController {
             wrapper.likeLeft("name",name);
         }
         if (!StringUtils.isEmpty(level)) {
-            wrapper.eq("level",name);
+            wrapper.eq("level",level);
         }
         if (!StringUtils.isEmpty(begin)) {
-            wrapper.ge("gmt_create",name);
+            wrapper.ge("gmt_create",begin);
         }
         if (!StringUtils.isEmpty(end)) {
-            wrapper.le("gmt_modified",name);
+            wrapper.le("gmt_modified",end);
         }
+        //排序
+        wrapper.orderByDesc("gmt_create");
 
-        long total = pageTeacher.getTotal();
-        List<EduTeacher> list = pageTeacher.getRecords();
-        teacherService.page(pageTeacher, wrapper);
-        return R.ok().data("total", total).data("teacherList", list);
+        //调用方法实现条件查询分页
+        teacherService.page(pageTeacher,wrapper);
+
+        long total = pageTeacher.getTotal();//总记录数
+        List<EduTeacher> records = pageTeacher.getRecords(); //数据list集合
+
+
+        return R.ok().data("total", total).data("teacherList", records);
     }
 
     /**
@@ -124,7 +131,7 @@ public class EduTeacherController {
      * 修改对象
      * */
     @ApiOperation(value = "根据id查询对象")
-    @PostMapping("find/{id}")
+    @GetMapping("find/{id}")
     public R getTeacherById(@PathVariable String id){
         EduTeacher teacher = teacherService.getById(id);
 
