@@ -1,0 +1,28 @@
+server:
+  port: 8001
+spring:
+  profiles:
+    active: dev
+  application:
+    name: service-edu
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://172.30.2.4:3306/kerwin?serverTimezone=Asia/Shanghai
+    username: root
+    password: '!QAZxsw2'
+#  设置全局时间格式
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+mybatis-plus:
+#  控制台输出sql信息
+#  configuration:
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+#  设置逻辑删除默认值
+  global-config:
+    db-config:
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+#设置当前日志级别
+#logging:
+#  level:
+#    root: info
