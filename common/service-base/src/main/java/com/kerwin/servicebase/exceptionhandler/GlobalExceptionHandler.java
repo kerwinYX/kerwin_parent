@@ -25,9 +25,9 @@ public class GlobalExceptionHandler {
     /**
      * 自定义异常
     * */
-    @ExceptionHandler(kerwinException.class)
+    @ExceptionHandler(KerwinException.class)
     @ResponseBody //为了返回数据    会先执行小异常  特定异常
-    public R error(kerwinException e) {
+    public R error(KerwinException e) {
         e.printStackTrace();
         log.error(e.getMessage());
         return R.error().code(e.getCode()).message(e.getMsg());

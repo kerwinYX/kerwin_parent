@@ -9,7 +9,7 @@ import lombok.*;
 @Setter
 @AllArgsConstructor  //生成有参数构造方法
 @NoArgsConstructor   //生成无参数构造
-public class kerwinException extends RuntimeException {
+public class KerwinException extends RuntimeException {
     /**
      * 异常状态码
      * */

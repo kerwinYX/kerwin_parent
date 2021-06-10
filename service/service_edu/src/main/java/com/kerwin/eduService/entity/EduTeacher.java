@@ -1,22 +1,24 @@
 package com.kerwin.eduService.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
+
+import java.util.Date;
+
+import java.io.Serializable;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
-import java.io.Serializable;
-import java.util.Date;
-
 /**
  * <p>
  * 讲师
  * </p>
  *
- * @author kerwin
- * @since 2021-06-07
+ * @author testjava
+ * @since 2020-02-24
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
