@@ -40,7 +40,7 @@ public class EduTeacherController {
     @GetMapping("findAll")
     public R findAllTeacher() {
         List<EduTeacher> list = teacherService.list(null);
-        return R.ok().data("allTeachers", list);
+        return R.ok().data("items", list);
     }
 
     //讲师逻辑删除
