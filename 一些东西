@@ -1,0 +1,239 @@
+spring:
+	所有的bean都是对象   但是所有的对象不一定都是bean
+	spring会去自动填充属性(有@autowired标签的属性会自动填充)
+	
+	bean的生命周期
+	狭义
+		class---> new UserService() --> 填充属性 ——> 
+				Aware ——> 初始化 ——> AOP ——> 单例池(Map(BeanName,对象))
+	广义	
+	
+				  (根据注解设置到BeanDefinition的属性中) 
+		class---> BeanDefinition ——>BeanFactory组建完成 ——>  BeanFactoryProcessor(Bean工场后置处理器) ——> new UserService() --> 填充属性 ——> 
+				Aware ——> 初始化 ——> AOP ——> 单例池(Map(BeanName,对象))
+		 > 
+		 
+		 
+		 
+	springboot中的MapperScan注解虽然可以添加在启动类上，但是建议添加到配置类config上
+		 
+		 
+redis	string	list	hash	set		zet
+	NX 				表示key不存在时才进行设置(返回OK)，存在则返回 NULL
+	XX  			表示key存在时才进行设置，不存在则返回NULL
+	EX seconds  	设置过期时间 time 时间为秒 ttl命令查看剩余时间
+	PX millseconds	设置过期时间 time 时间为毫秒 
+	
+	批量操作	mset k1 v1 k2 v2...  mget k1 k2 k3...命令
+	
+	GETSET k v :先查询k的值再设置成v
+
+
+redis  GEO   地图相关，输入经纬度即可获取之间的距离等等   地图附近数据搜索可用
+
+
+redis   hash槽  0 - 2^14-1个槽位置   然后在分配给redis服务器
+	******
+	springboot集成redis缓存之后的注解相关：
+		1.@Cacheable(value="缓存名",key = "'kerwin'") 
+			注解的作用：一般用于查询方法之上，每当有请求访问该方法时，缓存中有数据直接返回，无数据时会去db中查询到数据并放入缓存中
+			存入redis缓存后的命名方式 redis中key为：  缓存名::kerwin
+		2.@CachePut(value="缓存名")
+			一般用于新增方法上
+		
+		3.@CacheEvent(value="缓存名"，allEntries="false" beforeInvocation = "false")  一般用于更新或删除方法上
+			allEntries：是否清空所有缓存，如果指定为true 方法调用后会立即清空所有的缓存
+			beforeInvocation：是否在方法执行前就清空 ，如果指定为true 方法调用前就会立即清空所有的缓存
+		
+		
+
+
+
+
+
+rabbitmq
+	rabbitmq 选择不持久化时  也是会存盘的   只是在服务器重启时  数据会丢失
+	rabbitmq 中不存在没有交换机的队列  不指定交换机时会有一个默认的交换机 (负责消息的分发投递)direct 模式
+	异步多线程  
+	
+	
+	消息是通过交换机去进行分发的
+	
+	交换机模式：
+	简单模式 ： 默认交换机  direct模式  路由模式
+	fanout 模式：只要订阅都能获得  (此模式可以设置路由key (routekey )但是就算设置也没有用处)  (发布/订阅模式Publish/Subscribe)
+	direct 模式：根据订阅路由key匹配到消费者   路由模式
+	topic  模式：可模糊匹配路由key    * : 有且只能匹配一级单词   # : 匹配0个或多个单词
+	
+	
+	work 模式：轮询模式，获取的机会等同，均分，不会因为服务器的性能等因素而更改
+			   公平模式，（必须设置手动应答） 设置qos 设置一次取的数值，然后根据消费者的性能，性能好的就会多取  (类似能者多劳)
+	
+	
+	磁盘空间换取内存空间
+	
+Nginx:  请求转发，负载均衡(可用网关去做该功能)，动静分离
+
+
+
+
+
+MYSQL优化主要分为以下四大方面：
+
+	设计：存储引擎，字段类型，范式与逆范式
+	功能：索引，缓存，分区分表。
+	架构：主从复制，读写分离，负载均衡。
+	合理SQL：测试，经验。
+
+
+对于mysql中的存储引擎使用
+	Innodb ：数据完整性，并发性处理，擅长更新，删除。
+				每个表都有自己独立的表空间；每个表的数据和索引都会存储在各个独立的表空间中
+				innodb擅长处理并发的。因为它使用了行级锁定，只该行锁了，其它行没有锁。
+				innodb擅长事务、数据的完整性及高并发处理，不擅长快速插入（插入前要排序，消耗时间）和检索。
+	myisam：高速查询及插入。擅长插入和查询。
+				数据和索引分别存储于不同的文件中
+				数据的存储顺序为插入顺序（不会经过排序）
+				仅仅支持表级锁定，不支持高并发。
+			
+
+乐观锁：通过一个版本号来应对			
+	
+SQL优化
+		explain关键字的使用来判断该条sql是否使用到了索引去查询，根据查询字段的使用程度，设置对应的索引。
+			a、不要过度索引。索引越多，占用空间越大，反而性能变慢；
+			b.只对WHERE子句中频繁使用的建立索引；
+			c.尽可能使用唯一索引，重复值越少，索引效果越强；
+			d.使用短索引，如果char(255)太大，应该给它指定一个前缀长度，大部分情况下前10位或20位值基本是唯一的，那么就不要对整个列进行索引；
+			e.充分利用左前缀，这是针对复合索引，因为WHERE语句如果有AND并列
+				只能识别一个索引(获取记录最少的那个)，索引需要使用复合索引，那么应该将WHERE最频繁的放置在左边。
+			f.索引存在，如果没有满足使用原则，也会导致索引无效：
+		
+			
+		
+	1.对于并发性sql,少用或者不用多表操作(子查询、联合查询)，而是将复杂的sql拆分成多次执行。如果做到查询很原子，会增加查询缓存的利用率 
+	2.在做批量插入或者从文件里载入数据到表里时，myisam 可以先禁用索引约束，然后在执行插入之后再启用索引；
+		innodb先删除索引和约束(保留主键)，开启事务并关掉自动提交，插入之后再加上之前的索引和约束
+	3.分区分表，水平分表：可以利用hash算法对某些字段取hash分区(eg:按照生日字段取hash，然后分到12个表中)
+		垂直分表：可以把字段分为常用字段和非常用字段，分别储存在不同的表中、把大字段的数据拆分到一个表中(eg:小说内容，描述信息等等text，blog类型字段)
+	4.主从复制，读写分离，负载均衡
+	5.使用分页，limit关键字的使用
+	6.把一段繁琐的sql拆分分段执行，逐个排查耗时的sql
+	
+
+
+maven:
+	导入maven仓库中不存在的jar包 进入 jar包所在文件夹  进入cmd输入命令
+		mvn install:install-file -DgroupId=com.aliyun -DartifactId=aliyun-java-vod-upload -Dversion=1.4.11 -Dpackaging=jar -Dfile=aliyun-java-vod-upload-1.4.11.jar
+				-DgroupId  --》 groupId 
+				-DartifactId  ==》artifactId
+				-Dversion	  ==》version
+
+
+前后台数据接口访问时的跨域问题： 网络协议(http  https)  ip、端口 只要有一个不相同 即会产生跨域问题
+	Spring 中 可在类上加注解 @CrossOrigin即可
+	
+	
+	
+easyExcel:读写操作：
+			写：  //实现excel写操作
+					//设置写入文件夹地址和excel文件名称
+					String filename = "D:\\table2.xlsx";
+					//调用
+					/*
+					 params1: 需要写入到的文件名
+					 params2: 实体类的class
+					*/
+					List<DemoData> list = new ArrayList<>();
+					for (int i = 0; i < 10; i++) {
+						DemoData data = new DemoData();
+						data.setSno(i+1);
+						data.setSname("kerwin"+i);
+						list.add(data);
+					}
+					EasyExcel.write(filename,DemoData.class).sheet("学生列表").doWrite(list);
+		读操作 需要编写一个监听器
+			public class ExcelListener extends AnalysisEventListener<DemoData> {
+
+				//一行一行读取内容
+				@Override
+				public void invoke(DemoData data, AnalysisContext context) {
+					System.out.println("表数据"+data);
+				}
+
+				//读取结束之后执行
+				@Override
+				public void doAfterAllAnalysed(AnalysisContext context) {
+
+				}
+
+				//读取表头
+				@Override
+				public void invokeHeadMap(Map<Integer, String> headMap, AnalysisContext context) {
+					System.out.println("表头"+headMap);
+				}
+			}
+		
+		EasyExcel.read(filename,DemoData.class,new ExcelListener()).sheet().doRead();
+		
+		
+		
+		
+springboot集成nacos：（默认端口8848）
+	配置 
+		spring.cloud.nacos.discovery.server-addr=127.0.0.1:8848
+		feign.hystrix.enabled=true #开启熔断机制
+
+	1.安装并启动nacos  
+	2.在需要注册的服务启动类上加
+		@EnableDiscoveryClient   服务注册  调用端与被调用端都需要加  都注册进入nacos
+		@EnableFeignClients		 服务调用  需要调用者才需加此注解(消费端)
+	3.调用者启动类加@EnableFeignClients注解后，
+		还需创建一个interface接口，注册进spring之后，
+		加入服务调用注解 @FeignClient("service-vod")  其中是需要调用方法所在的服务名
+	eg:  即在此服务内调用eduvod服务中的指定接口(controller接口)  此处路径需是完全路径
+		@Component
+		@FeignClient(name = "service-vod",fallback = VodClientImp.class)  //触发熔断机制之后(访问出错)，会去执行VodClientImp实现类中的同名方法
+		/**
+		 * 需要在调用服务中编写被调用服务的服务名
+		 * 并且在调用的方法上写上完全路径 如用到PathVariable中一定要指定名称@PathVariable("id")
+		 * */
+		public interface VodClient {
+			//定义需要调用的方法的路径
+			@GetMapping("/eduvod/video/testNacos/{id}")
+		//    此处 PathVariable中一定要指定名称
+			public R testNacos(@PathVariable("id") String id);
+		}
+		
+	
+	
+		
+	单点登录 SSO
+		1.session 广播机制实现(早期使用，不建议使用)
+			session的复制实现，在模块间的复制，使得每个模块中都有当前登录信息存在
+			session的默认过期时间为30分钟。
+			
+		2.使用cookie + redis实现
+			redis:key:生成唯一随机值(用户ip,id等)，value 用户数据
+			cookie:把生成的唯一随机值放到用户本地的cookie中
+			当用户访问其他模块时，cookie值随着请求发送到其他服务端，服务端利用cookie值去redis中查找，查询到数据则说明已登录
+				当所需安全性较高时，可拿查询到的数据在数据库中作比对之后在继续操作
+			可以通过redis过期时间设置登录到时失效
+			
+		3.使用token实现(令牌机制)
+			按照一定的规则生成字符串，字符串中可以包含用户信息 在经过base64编码、加密等方式改变,(自包含令牌)
+			然后把字符串通过cookie或地址栏进行传递数据
+			此时访问其他服务端时，客户端可以通过cookie或地址栏后携带的字符串通过自己的加密解码方式解析出用户信息，能解析出则是说明已登录
+			
+	JWT: 可以理解为一种token令牌生成规则  包含用户信息
+		生成的字符串包含3个部分
+			1.头信息 
+			2.有效载荷 （用户信息）  
+			3.签名哈希值   防伪标志
+		
+		
+		
+		
+		
+		
+	

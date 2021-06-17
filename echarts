@@ -1,0 +1,36 @@
+  echarts分段变色
+  
+  ---适用柱状图
+  itemStyle: {
+                normal: { //这里必须加normal,否者不显示颜色变化
+                    color: function(params) {//超过预警值显示红色
+                        if (params.value > 0) {
+                            return 'pink';
+                        } else {
+                            return 'green';
+                        }
+                    }
+                }
+            }
+			
+  ---适用折线图
+  visualMap: {
+              show: true,
+              pieces: [{
+                  gt: 0,
+                  lte: 190,
+                  color: 'red'
+              }, {
+                  gt: 190,
+                  color: 'green'
+              }],
+              seriesIndex: 0
+          },
+		  
+		  
+	--- x轴换行  
+   data: ['1月 A', '2月 B', '3月 B', '4月 D', '5月 E', '6月 F', '7月 G', 
+	'8月 H', '9月 I', '10月 J', '11月 K', '12月 L'].map(function(str){
+		return str.replace(' ','\n')
+		
+	}),

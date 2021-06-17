@@ -7,11 +7,15 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="service_edu" />
         <module name="service_oss" />
-        <module name="common-utils" />
+        <module name="service-ucenter" />
         <module name="service-base" />
         <module name="service_vod" />
+        <module name="service_edu" />
+        <module name="service_msm" />
+        <module name="common-utils" />
+        <module name="service_cms" />
+        <module name="service-acl" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -19,8 +23,12 @@
       <module name="common-utils" target="1.8" />
       <module name="kerwin_parent" target="1.8" />
       <module name="service" target="1.8" />
+      <module name="service-acl" target="1.8" />
       <module name="service-base" target="1.8" />
+      <module name="service-ucenter" target="1.8" />
+      <module name="service_cms" target="1.8" />
       <module name="service_edu" target="1.8" />
+      <module name="service_msm" target="1.8" />
       <module name="service_oss" target="1.8" />
       <module name="service_vod" target="1.8" />
     </bytecodeTargetLevel>
@@ -31,8 +39,12 @@
       <module name="common-utils" options="-parameters" />
       <module name="kerwin_parent" options="-parameters" />
       <module name="service" options="" />
+      <module name="service-acl" options="-parameters" />
       <module name="service-base" options="-parameters" />
+      <module name="service-ucenter" options="-parameters" />
+      <module name="service_cms" options="-parameters" />
       <module name="service_edu" options="-parameters" />
+      <module name="service_msm" options="-parameters" />
       <module name="service_oss" options="-parameters" />
       <module name="service_vod" options="-parameters" />
     </option>

@@ -1,0 +1,149 @@
+读取excel文件方法二
+//System.Collections.IEnumerator rows = sheet1.GetRowEnumerator();
+//while (rows.MoveNext())
+//{
+//    IRow row = (IRow)rows.Current;
+//}
+
+
+pgsql:
+//查询sql
+select pid,state,query  from pg_stat_activity 
+//杀死进程
+select pg_terminate_backend('331056')
+
+
+js  
+   
+function(obj){
+    var a = obj || {}
+}  ===
+function(obj){
+    var a;
+	if(
+		obj === 0 || 
+		obj === "" || 
+		obj === false || 
+		obj === null || 
+		obj === undefined
+	){
+ 		a = {}
+ 	} else {
+		a = obj;
+	}
+}
+
+function(obj){
+    var a = obj ?? {}
+} ===
+
+function(obj){
+    var a;
+	if( 
+		obj === null || 
+		obj === undefined
+	){
+ 		a = {}
+ 	} else {
+		a = obj;
+	}
+} 
+
+es6： 低版本的浏览器有些支持性不好
+`` 符号的作用：1.在一段js字符串中使用该符号 则表明可换行输出
+				eg: `hello
+						1232`  输出时是两行
+			  2.可以使用表达式获取值
+				eg:let name = "kerwin"
+					let str = `hello ,${name}`  //输出：hello,kerwin
+			  3.可以使用调用方法
+				eg: function f1(){return "kerwin"};
+					let str = `hello,${f1()}`;   //输出 hello,kerwin
+					
+es6中可简便生成对象
+	eg：let name = "kerwin"  let age = 22
+		let person = {name,age}   类同于  let person = {name:name,age:age};
+		
+// 方法定义&调用	
+let person = {
+	he1(){
+		alert(111)
+	},
+	he2(){
+		alert(222)
+	}
+}
+    person.he2();  // 弹窗 222	
+ 
+ 
+...  符号的作用：1.拷贝复制对象
+					eg:let person = {name:name,age:age};
+					   let person1 = {...preson};
+				 2.对象合并	
+					eg: let name = {name:"kerwin"}
+						let age = {age :22}
+						let person = {...name,...age}
+ 
+箭头函数：let fun1 = (a,b) => a+b    fun1(1,2) = 3; 
+       
+	
+Nodejs
+	
+	node 01.js   在cmd窗口中直接执行js代码
+
+	npm init -y 以默认属性初始化 会出现package.json文件 类似于后端pom文件夹  管理依赖
+
+	设置npm的镜像使用淘宝的：npm config set registry https://registry.npm.taobao.org
+		
+	根据配置文件下载依赖  只需在配置文件中写好需要引入的依赖  直接使用  npm install命令，后不需跟依赖名
+	npm install jquery(依赖名称)  -> 下载依赖
+	npm install jquery@指定版本号  -> 下载指定版本的依赖
+
+
+	babel  js 代码转码器  可以把es6的代码转化为es5的代码  因为es6的代码书写很简洁，但是兼容性不好  es5的兼容性很好，但是代码很复杂	
+	npm安装babel  npm install babel-cli  -g   //-g 全局使用  --version  查看版本
+
+	如需转码  需新建一个 .babelrc的文件夹  并做配置 
+				{
+					"presets": ["es2015"],
+					"plugins": []
+				}
+
+	之后下载转码器  npm install --save-dev babel-preset-es2015	                        --save-dev当前环境使用		
+
+	使用命令转码 babel es6code/es6code.js -o es6code/es5code/es5code.js         根据js文件转码
+				 babel es6code -d es5code                                       根据文件夹转码  把es6code文件夹下的所有es6js文件
+																					都转码成es5code文件夹下同名的es5js文件
+	
+	安装webpack ： npm install -g webpack-cli
+	如需打包需配置文件：webpack.config.js 内容：
+					const path = require("path"); // Node.js内置模块
+					module.exports = {
+						entry:'./src/main.js', // 配置入口文件
+						output:{
+							path:path.resolve(__dirname,'./dist'), //输出的路径 _dirname 当前文件路径
+							filename:'bundle.js' //输出文件名
+						}
+					}
+	
+	打包命令：webpack (可选：--mode=development 或者  production)
+	
+	
+	
+	数据接口访问时浏览器每次都会发起两次请求，第一次请求类型为option用于判断该路径是否可以连接成功 ，此次请求并不会返回数据
+		当可以连接成功之后会发起第二次真正的post/get或其他类型的请求，然后获得返回的数据
+		
+	export default{
+		//讲师列表(条件分页查询)
+		getTeacherListPage(currentPage,size,teacherQuery){
+			return request({
+				//url:`/eduService/teacher/pageListTeacherByCondition/'+currentPage+'/'+size`,
+				url:`/eduService/teacher/pageListTeacherByCondition/${currentPage}/${size}`,
+				method:'post',
+				//teacherQuery对象，后端接口使用RequestBody获取数据
+				//data表示把对象转换json进行传递到数据接口
+				data: teacherQuery
+			})
+		}
+}
+	

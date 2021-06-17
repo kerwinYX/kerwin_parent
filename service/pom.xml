@@ -15,7 +15,10 @@
         <module>service_edu</module>
         <module>service_vod</module>
         <module>service_oss</module>
-        <module>service_oss</module>
+        <module>service_cms</module>
+        <module>service-acl</module>
+        <module>service_msm</module>
+        <module>service-ucenter</module>
     </modules>
     <dependencies>
 
@@ -30,27 +33,27 @@
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
-        <!--<dependency>
+        <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-ribbon</artifactId>
-        </dependency>-->
+        </dependency>
 
         <!--hystrix依赖，主要是用  @HystrixCommand -->
-        <!--<dependency>
+        <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-hystrix</artifactId>
-        </dependency>-->
+        </dependency>
 
         <!--服务注册-->
-        <!-- <dependency>
+        <dependency>
              <groupId>org.springframework.cloud</groupId>
              <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
-         </dependency>-->
+        </dependency>
         <!--服务调用-->
-        <!-- <dependency>
+         <dependency>
              <groupId>org.springframework.cloud</groupId>
              <artifactId>spring-cloud-starter-openfeign</artifactId>
-         </dependency>-->
+         </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -130,5 +133,6 @@
             <version>4.12</version>
         </dependency>
     </dependencies>
+
 
 </project>

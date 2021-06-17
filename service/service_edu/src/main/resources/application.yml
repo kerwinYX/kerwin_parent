@@ -1,6 +1,25 @@
 server:
   port: 8001
+  mybatis-plus:
+    #  控制台输出sql信息
+    #  configuration:
+    #    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    #  设置逻辑删除默认值
+    global-config:
+      db-config:
+        logic-delete-value: 1
+        logic-not-delete-value: 0
+    mapper-locations: classpath:com/kerwin/eduService/mapper/xml/*.xml
+  #设置当前日志级别
+  #logging:
+  #  level:
+  #    root: info
 spring:
+  #nacos配置
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
   profiles:
     active: dev
   application:
@@ -13,16 +32,7 @@ spring:
 #  设置全局时间格式
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
-mybatis-plus:
-#  控制台输出sql信息
-#  configuration:
-#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-#  设置逻辑删除默认值
-  global-config:
-    db-config:
-      logic-delete-value: 1
-      logic-not-delete-value: 0
-#设置当前日志级别
-#logging:
-#  level:
-#    root: info
+feign:
+  hystrix:
+    enabled: true #开启熔断机制
+

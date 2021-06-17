@@ -1,0 +1,33 @@
+server:
+  port: 8004
+mybatis-plus:
+  mapper-locations: classpath:com/kerwin/educms/mapper/xml/*.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+spring:
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    database: 0
+    timeout: 1800000
+    lettuce:
+      pool:
+        max-active: 20
+        max-wait: 1
+        max-idle: 5
+        min-idle: 0
+  application:
+    name: service-cms
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+  profiles:
+    active: dev
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://172.30.2.4:3306/kerwin?serverTimezone=Asia/Shanghai
+    username: root
+    password: '!QAZxsw2'
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
