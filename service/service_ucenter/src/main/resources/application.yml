@@ -1,7 +1,7 @@
 server:
-  port: 8005
+  port: 8006
 mybatis-plus:
-  mapper-locations: classpath:com/kerwin/educms/mapper/xml/*.xml
+  mapper-locations: classpath:com/kerwin/educenter/mapper/xml/*.xml
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 spring:
@@ -17,7 +17,7 @@ spring:
         max-idle: 5
         min-idle: 0
   application:
-    name: service-cms
+    name: service-ucenter
   cloud:
     nacos:
       discovery:
@@ -31,3 +31,13 @@ spring:
     password: '!QAZxsw2'
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
+#wx:
+#  open:
+#    # 微信开放平台 appid
+#    appid: wxed9954c01bb89b47
+#    # 微信开放平台 appsecret
+#    appsecret: a7482517235173ddb4083788de60b90e
+#
+#    redirecturl: http://guli.shop/api/ucenter/wx/callback
+
+
