@@ -1,9 +1,14 @@
 package com.kerwin.eduService.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.kerwin.eduService.entity.EduCourse;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.kerwin.eduService.entity.frontvo.CourseFrontVo;
+import com.kerwin.eduService.entity.frontvo.CourseWebVo;
 import com.kerwin.eduService.entity.vo.CourseInfoVo;
 import com.kerwin.eduService.entity.vo.CoursePublishVo;
+
+import java.util.Map;
 
 /**
  * <p>
@@ -24,4 +29,8 @@ public interface EduCourseService extends IService<EduCourse> {
     CoursePublishVo PublishCourseInfo(String id);
 
     void removeCourse(String courseId);
+
+    Map<String, Object> getCourseFrontList(Page<EduCourse> pageCourse, CourseFrontVo courseFrontVo);
+
+    CourseWebVo getBaseCourseInfo(String courseId);
 }

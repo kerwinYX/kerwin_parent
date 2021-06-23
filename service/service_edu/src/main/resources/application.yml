@@ -1,15 +1,15 @@
 server:
   port: 8001
-  mybatis-plus:
-    #  控制台输出sql信息
-    #  configuration:
-    #    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-    #  设置逻辑删除默认值
-    global-config:
-      db-config:
-        logic-delete-value: 1
-        logic-not-delete-value: 0
-    mapper-locations: classpath:com/kerwin/eduService/mapper/xml/*.xml
+mybatis-plus:
+  #  控制台输出sql信息
+  #  configuration:
+  #    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  #  设置逻辑删除默认值
+  global-config:
+    db-config:
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+  mapper-locations: classpath:com/kerwin/eduService/mapper/xml/*.xml
   #设置当前日志级别
   #logging:
   #  level:

@@ -2,6 +2,7 @@ package com.kerwin.eduService.mapper;
 
 import com.kerwin.eduService.entity.EduCourse;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.kerwin.eduService.entity.frontvo.CourseWebVo;
 import com.kerwin.eduService.entity.vo.CoursePublishVo;
 
 /**
@@ -14,4 +15,6 @@ import com.kerwin.eduService.entity.vo.CoursePublishVo;
  */
 public interface EduCourseMapper extends BaseMapper<EduCourse> {
     public CoursePublishVo getPublishVoInfo(String id);
+
+    CourseWebVo getBaseCourseInfo(String courseId);
 }

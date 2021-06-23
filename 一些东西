@@ -1,3 +1,19 @@
+JAVA 
+	多线程的实现方法
+		1.继承Thread类,重写其中的run方法，并调用start方法.
+		2.实现Runnable类，重写其中的run方法，并调用start方法.此方法无返回值无法抛出异常 java1.1就存在
+		3.实现Callable类，重写其中的call方法,并调用start方法.此方法可以有返回值和抛出异常， 1.5优化实现
+		4.通过线程池的方法创建线程
+
+
+
+
+
+
+
+
+
+
 spring:
 	所有的bean都是对象   但是所有的对象不一定都是bean
 	spring会去自动填充属性(有@autowired标签的属性会自动填充)
@@ -124,6 +140,27 @@ SQL优化
 	5.使用分页，limit关键字的使用
 	6.把一段繁琐的sql拆分分段执行，逐个排查耗时的sql
 	
+	sql 中同时存在order by 和distinct关键字时会出现冲突 ，当order by中的字段不存在与 select中时 会报错	
+		解决办法：1.可以先执行order by方法 再调用distinct方法。 2.把order by中的字段放入select
+	
+SQL语句的执行顺序
+	(1)from 
+	(2) on 
+	(3) join 
+	(4) where 
+	(5)group by(开始使用select中的别名，后面的语句中都可以使用)
+	(6) avg,sum.... (sql函数)
+	(7)having 
+	(8) select 
+	(9) distinct
+	(10) union
+	(11) order by 
+	(12) limit
+
+	
+	
+	
+	
 
 
 maven:
@@ -244,5 +281,7 @@ springboot集成nacos：（默认端口8848）
 		2.分布式访问问题
 			单点登录，令牌机制
 		
-		
+	
+	
+	
 	
