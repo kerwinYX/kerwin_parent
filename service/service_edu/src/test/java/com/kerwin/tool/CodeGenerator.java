@@ -11,6 +11,8 @@ import com.baomidou.mybatisplus.generator.config.rules.DateType;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 import org.junit.Test;
 
+import java.util.Hashtable;
+
 
 public class CodeGenerator {
 
@@ -71,5 +73,10 @@ public class CodeGenerator {
 
         // 6、执行
         mpg.execute();
+    }
+
+    public static void main(String[] args) {
+        Hashtable<Object, Object> hashtable = new Hashtable<>();
+        hashtable.put(null,"123");
     }
 }

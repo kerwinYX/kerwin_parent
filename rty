@@ -1,0 +1,90 @@
+HashMap 和 HashTable的区别
+    1.HashMap是线程不安全的，HashTable是线程安全的
+    2.HashMap的kv都可以为null，HashTable的kv都不能为null,
+        当使用HashTable的put方法时，先会判断value是否为null,是则抛出空指针异常，否则继续，
+            当key为null时，则是在做hashcode()方法时抛出空指针异常
+            HashTable中，绝大部分方法都加锁了，就算方法体上没加锁，方法内部也有加锁，有一些私有方法没有加锁
+    3.HashMap的迭代器有fail-fast机制，其实和线程安全有关，当多个线程试图同时操作同一个HashMap时，会抛出ConcurrentModificationException异常
+
+HashMap 1.7 和 1.8 的区别
+    1.7中HashMap的底层实现是  数组+链表 ，使用的头插法的方式加入新数据，在多线程扩容的时候会有死循环的情况出现
+    1.8中HashMap的底层实现是  数组+链表+红黑树  当数组的长度达到64或者链表的长度大于8时，会由链表转化为红黑树
+        之所以选择要先扩容数组长度达到64是为了降低链表的长度，从而减少put/get的时间，
+        扩容后相同数据所存位置的数组下标也只会存在两个位置，当前下标和当前下标加上扩容前数组长度
+    1.7的currentHashMap加锁的是segment  1.8中因为使用的是尾插法，所以加锁的是头结点、
+        currentHashMap的初始容量大小会比填入的size大，计算方式为比（size+1）大的2的次方数
+
+
+线程的五种状态
+    1.新建（new）   此时刚new对象，jvm会初始化对象里的变量
+    2.就绪（start） 此时相当于执行到了Start()方法，jvm分配好程序计数器和创建方法调度栈，等到调度
+    3.运行（run）   此时已经拿到线程执行所需资源，执行run()方法，
+    4.阻塞（Blocked） 当线程执行Sleep()方法放弃cpu资源(Sleep()方法并不会放弃锁资源)， 或者有阻塞式IO(Read()、Write()方法)在其中被调用，suspend挂起。
+    5.死亡（Dead）  当程序run或者call方法执行完毕时，亦或者有Error,Exception之后线程会进入死亡状态。
+
+lock锁和synchronized锁的区别类似于乐观锁和悲观锁
+    1.lock是一个借口，synchronized是java中的一个关键字
+    2.synchronized是阻塞式锁，
+    3.lock锁必须在finally中释放锁资源，synchronized会自己释放锁资源
+    4.在等待锁的过程中，lock方式可以使用interrupt()方法自己中断该等待操作，synchronized就只能等待锁的释放，不能自己中断
+    5.lock能通过tryLock的方法来判断自己有没有获得到锁资源，synchronized不能
+
+乐观锁：获取到资源时不会上锁，但对数据操作前会对其进行判断，判断当前资源是否被修改过，实现方法，版本号控制和CAS实现。被修改过的话会通过自选循环判断等待，直至成功 eg:lock接口方法
+悲观锁：获取到资源后会把该资源锁住，其他想要获取该资源的线程就会处于阻塞状态，操作之前就上锁，eg:synchronized
+CAS: compare AND Swap  非阻塞同步
+
+    有三个主要的变量  内存位置(V)、预期原值(A)、新值(B),判断：如果内存地址中的值与预期原值(A)相同，那么就会将内存中的值改变为新值(B)
+    CAS是通过无线循环来获取数据的，如果在第一次循环中A的值被改变了，那么改线程就会自选，直至下一次循环执行操作。
+    CAS会造成ABA问题
+    CAS会造成CPU内存使用率过高，如果一直在循环状态中的话，会一直占有当前CPU资源
+
+重入锁：当某个线程请求一个被其他线程所持有的锁的时候，该线程会被阻塞(后面的读写锁先不考虑在内)，
+        但是像synchronized这样的内置锁是可重入的，即一个线程试图获取一个已经被该线程所持有的锁，这个请求会成功。
+        重入以为这锁的操作粒度是线程级别而不是调用级别。我们下面说到的ReentrantLock也是可重入的，
+        而除了支持锁的重入之外，该同步组件也支持公平的和非公平的选择。
+
+
+
+
+
+
+
+
+反射：
+    1.调用反射类方法的的方法的  方法().invoke();
+
+拦截器和过滤器的区别：
+	拦截器是属于java的反射机制，而过滤则是属于函数回调
+	拦截器不依赖servlet容器，过滤器依赖于servlet容器
+	拦截器只对Action起作用，过滤器可以对所有请求起作用
+	拦截器可以访问Action上下文和值栈中的对象，过滤器不能
+	在Action的生命周期中，拦截器可以多次调用，而过滤器只能在容器初始化时调用一次。
+
+拦截器--过滤器--监听器
+    拦截器依赖于web框架，实现是基于java的反射机制，所以只能拦截实现了接口的类，
+        一般用于登录认证，审计日志
+        spring拦截器 extends HandlerInterceptorAdapter 后自定义拦截
+
+    过滤器依赖于servlet容器，实现是基于函数回调的
+        一般用于过滤字符编码、URL级别上的权限访问控制、过滤敏感词汇等
+        需实现servlet下的filter接口，重写其中的 init()、doFilter()、destroy()方法
+
+    监听器 继承于EventListener接口 可以感知 request、session、application三个域中的初始化和属性变化
+        ServletContext 、HttpSession 、 ServletRequest
+
+
+JDBC的步骤：
+    1.注册驱动   class.forName()、 driverManager.driver() sys.setProp方法实现
+    2.建立连接 sqlConnection
+    3.编写sql语句并执行
+    4.处理结果集
+    5.释放资源
+
+
+
+
+
+
+
+
+

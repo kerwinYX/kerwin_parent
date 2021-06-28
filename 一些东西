@@ -35,6 +35,13 @@ spring:
 		 
 		 
 	使用@GetMapping的时候  传递的参数不能使用注解@RequestBody 会报错  改成@PostMapping即可
+	
+	自动任务@enableScheduled 注解写在启动类上
+	在定时方法上注解@Scheduled(cron="")  cron(*,*,*,*,*,*)七域表达式  秒 分 时 日 月 周 年  年部分在spingboot注解中默认为当年  故只有六位
+	
+	
+	
+	
 		 
 		 
 redis	string	list	hash	set		zet
@@ -47,6 +54,7 @@ redis	string	list	hash	set		zet
 	
 	GETSET k v :先查询k的值再设置成v
 
+zet 的数据结构是跳表
 
 redis  GEO   地图相关，输入经纬度即可获取之间的距离等等   地图附近数据搜索可用
 
@@ -80,7 +88,7 @@ rabbitmq
 	
 	交换机模式：
 	简单模式 ： 默认交换机  direct模式  路由模式
-	fanout 模式：只要订阅都能获得  (此模式可以设置路由key (routekey )但是就算设置也没有用处)  (发布/订阅模式Publish/Subscribe)
+	fanout 模式：只要订阅都能获得  (此模式可以设置路由key (routeKey )但是就算设置也没有用处)  (发布/订阅模式Publish/Subscribe)
 	direct 模式：根据订阅路由key匹配到消费者   路由模式
 	topic  模式：可模糊匹配路由key    * : 有且只能匹配一级单词   # : 匹配0个或多个单词
 	
@@ -92,7 +100,7 @@ rabbitmq
 	磁盘空间换取内存空间
 	
 Nginx:  请求转发，负载均衡(可用网关去做该功能)，动静分离
-
+    负载均衡：轮询，权重，最少连接，根据后台相应时间，根据ip的hash的结果，
 
 
 
@@ -128,7 +136,7 @@ SQL优化
 				只能识别一个索引(获取记录最少的那个)，索引需要使用复合索引，那么应该将WHERE最频繁的放置在左边。
 			f.索引存在，如果没有满足使用原则，也会导致索引无效：
 		
-			
+
 		
 	1.对于并发性sql,少用或者不用多表操作(子查询、联合查询)，而是将复杂的sql拆分成多次执行。如果做到查询很原子，会增加查询缓存的利用率 
 	2.在做批量插入或者从文件里载入数据到表里时，myisam 可以先禁用索引约束，然后在执行插入之后再启用索引；
@@ -280,8 +288,38 @@ springboot集成nacos：（默认端口8848）
 		
 		2.分布式访问问题
 			单点登录，令牌机制
-		
+
+canal是一个数据同步工具   由java 开发   目前只支持mysql  
+	远程库和本地库之间的数据同步(数据表结构需一致)
 	
-	
-	
+SpringCloud
+	nacos 服务发现  注册中心
+	feign 服务调度
+	Hystrix 熔断器
+	GateWay 网关
+
+Docker命令
+	docker ps   列出当前所有正在运行的容器
+	docker run [OPTIONS] IMAGE根据镜像新建并启动容器。IMAGE是镜像ID或镜像名称
+		OPTIONS说明：
+			 --name=“容器新名字”：为容器指定一个名称
+			 -d：后台运行容器，并返回容器ID，也即启动守护式容器
+			 -i：以交互模式运行容器，通常与-t同时使用
+			 -t：为容器重新分配一个伪输入终端，通常与-i同时使用
+			 -P：随机端口映射
+			 -p：指定端口映射，有以下四种格式：
+			ip:hostPort:containerPort
+			ip::containerPort
+			hostPort:containerPort
+			containerPort
+	docker start 容器ID或容器名称启动容器
+	docker restart 容器ID或容器名称重新启动容器
+	docker stop容器ID或容器名称停止容器
+	docker kill 容器ID或容器名称强制停止容器
+	docker top 容器ID或容器名称查看容器内运行的进程
+	docker inspect 容器ID或容器名称查看容器内部细节
+	docker attach 容器ID进到容器内
+	docker exec 容器ID进到容器内
+	docker cp 容器ID:容器内的文件路径 宿主机路径从容器内拷贝文件到宿主机.
+
 	

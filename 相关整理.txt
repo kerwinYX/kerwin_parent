@@ -1,0 +1,332 @@
+linux常用命令：
+	查看当前路径的命令  : pwd
+	查看目录中的文件：ls
+	切换路径：cd
+	查看别名：alias
+	创建目录：mkdir
+	删除文件夹：rmdir   不可能删除非空文件夹
+	创建文件：touch
+	删除文件：rm 文件名  -f 强制删除 -v可视化删除 -r询问是否删除
+	复制拷贝文件：cp -r 源文件 目标文件
+	移动文件：mv  若果目录存在，则会将原目录移动到目标目录下；如果目录不存在，则相当于移动并重命名
+	查看文件：cat 参数-A 查看所有内容，$代表每行的结尾  参数-n 显示行号
+		一屏一屏查看文件内容，只会显示进度：more，
+		持使用方向键翻页查看文件内容：less
+		倒序查看文件内容：tac
+		全文搜索：
+			/搜索内容   ---从前往后搜索
+			?搜索内容   ---从后往前搜索
+	文件搜索：find / -name file 从 '/' 开始进入根文件系统搜索文件和目录
+	压缩文件：gzip fileName
+	创建tar包： tar -cvf archive.tar file1 
+	解压tar包： tar -xvf archive.tar
+
+	挂载一个文件系统：mount 盘的路径
+	创建一个新用户组：groupadd group_name
+	删除一个用户组 ：groupdel group_name
+	设置权限：chmod 
+	
+		
+
+
+
+servlet的生命周期：
+	init()初始时执行的方法  
+	Service()具体方法--doGet()  doPost(方法)   
+	destroy()销毁时执行的方法
+
+
+
+java数组转集合	只有基本数据类型的包装类型，才能直接转为List。  基本类型的并不能使用asList
+	1.asList方法，但是使用此方法只是相当于实现了一个list接口，并不属于真正的list，因为并不能使用集合中的add，remove方法
+
+	    Arrays.asList(strArray)返回值是java.util.Arrays类中一个私有静态内部类java.util.Arrays.ArrayList，它并非java.util.ArrayList类。
+	    java.util.Arrays.ArrayList类具有 set()，get()，contains()等方法，但是不具有添加add()或删除remove()方法,所以调用add()方法会报错。
+	    想要让该对象拥有这些属性的话，可以通过ArrayList的构造器，将Arrays.asList(strArray)的返回值由java.util.Arrays.ArrayList转为java.util.ArrayList
+	    	eg:ArrayList<String> list = new ArrayList<String>(Arrays.asList(strArray)) ;
+
+	2.Collections.addAll()方法  ---推荐使用
+	    通过Collections.addAll(arrayList, strArray)方式转换，根据数组的长度创建一个长度相同的List，
+	    然后通过Collections.addAll()方法，将数组中的元素转为二进制，然后添加到List中，这是最高效的方法。
+	    	ArrayList< String> arrayList = new ArrayList<String>(strArray.length);
+	    	Collections.addAll(arrayList, strArray);
+	3.Java8可通过stream流将3种基本类型数组转为List
+		eg:
+		String[] arrays = {"tom", "jack", "kate"};
+		List<String> stringList= Stream.of(arrays).collect(Collectors.toList());
+
+
+使用JDBC操作数据库的步骤：
+	1.加载驱动  利用 
+		a. Class.forName(“com.mysql.jdbc.Driver”) 
+		b. 利用DriverManager.registerDriver(com.mysql.jdbc.Driver)方法	
+		c. System.setProperty(“jdbc.drivers”,”com.mysql.jdbc.Driver”);
+	2.创建sql连接
+	3.编写并执行sql语句
+	4.处理返回结果集
+	5.释放资源
+
+
+java反射：
+	利用Class clazz = Object.getClass()
+	Object obj =  clazz.newInstance(); 生成对象
+	clazz 可以调用declaredMethods 获取所有方法的集合，调用方法：集合中的方法调用invoke()方法
+
+java内存：  Heap(堆)是OOM故障最主要的发源地
+	程序计数器：是一块较小的内存空间，是一个“线程私有”的内存区域，它可以看作是当前线程所执行的字节码的行号指示器  是唯一一块不会抛出OOM的地方
+
+	虚拟机栈:JVM栈是线程私有的内存区域。它描述的是java方法执行的内存模型
+
+	本地方法栈：本地方法栈和虚拟机栈所发挥的作用是很相似的，它们之间的区别不过是虚拟机栈为虚拟机执行Java方法（字节码）服务，
+			而本地方法栈则为虚拟机使用到的Native方法服务
+
+
+	堆：创建对象是在此处，存储着几乎所有的实例对象，堆由垃圾收集器自动回收，堆区由各子线程共享使用
+
+	方法区: 方法区是被所有线程共享的内存区域，用来存储已被虚拟机加载的类信息、常量、静态变量、JIT（just in time,即时编译技术）编译后的代码等数据。
+		    运行时常量池是方法区的一部分，用于存放编译期间生成的各种字面常量和符号引用。
+
+
+equals 和  ==(双等号)的区别：
+	== 对于基本类型来说，是值比较，对于引用对象而言，比较的是引用的地址
+	equals 在不重写的情况下比较的是引用地址  本地底层的调用也是用了 == 方法区判断
+
+
+HashMap和HashTable的区别	
+
+	HashTable是线程安全的，HashMap线程不安全。
+
+	HashTable的键值不允许为null，HashMap允许。
+	    HashTable 会先判断值是否为null,为null直接抛出空指针异常，而key实在取hashCode的时候会抛出空指针异常
+	        HashTable中几乎所有的方法都加锁了，就算方法上没加锁，其内调用的方法也加锁了，有些私有方法没有加锁
+
+	Hashtable的enumerator迭代器不是fail-fast，HashMap的迭代器(Iterator)是fail-fast迭代器，
+
+		fail-fast机制其实就是 当两个线程同时操作同一个HashMap时，使用迭代器输出的话，会产生一个
+
+		ConcurrentModificationException 的异常，也就是fail-fast事件
+
+
+线程的生命周期：
+	新建（new）、就绪（runnable）、运行（running）、阻塞（Blocked）、死亡（Dead）五种状态
+
+	新建（new）：程序new创建一个线程之后，就处于新建状态，此次jvm会为其分配内存，并初始化其成员的初始值、
+	就绪（runnable）：当线程调用start()方法之后，该线程处于就绪状态。Java虚拟机会为其创建方法调用栈和程序计数器，等待调度运行
+	运行（running）：如果处于就绪状态的线程获得了CPU，开始执行run()方法的线程执行体，则该线程处于运行状态
+	阻塞（Blocked）: 当处于运行状态的线程失去所占用资源之后，便进入阻塞状态
+		当发生如下情况，线程就进入阻塞状态：
+			sleep（），主动放弃所占用的处理器资源
+			调用阻塞式IO方法，如Read（）、Write（）
+			线程试图获取一个同步监视器，但该监视器正被其它线程所持有
+			suspend（）将线程挂起，此方法容易导致死锁
+		解除阻塞：
+		  当发送如下情况，线程进入就绪状态
+			 sleep（）指定等待时间已过
+			调用阻塞IO已返回
+			线程获取了同步监视器
+			线程正等待某个通知时，其它线程发出了通知
+			处于挂起的线程调用了resume（）（重新启动）
+
+	死亡（Dead）:stop(),发生异常、错误、或执行完成（run()/call() 方法执行完毕）之后，就会进入死亡状态
+
+
+Thread类的sleep()方法和wait()方法的区别
+	两者都能让线程暂停执行
+	1.sleep()方法是Thread类的静态方法，调用sleep()方法的时候，线程会让出当前获得的cpu资源，但是获得的锁资源还是保持，当休眠状态结束是，线程会自动恢复回到就绪状态等待cpu资源
+	2.wait()方法是Object类的方法，调用wait()方法的时候，会让当前线程放弃其获得的锁资源，并不能自动苏醒，
+		只能等待 notify()和notifyAll()方法将其唤醒后进入等待锁资源池(阻塞状态)，重新获得锁资源后，就进入就绪状态
+sleep()方法和yield()方法
+	1.sleep()方法执行时是不考虑等待线程优先级的，无论优先级，都有获取cpu资源的机会
+	  yield() 方法执行时会考虑等待线程优先级的，即低优先级的线程并不会获得到当前线程sleep()之后让出的cpu资源，只有高优先级的线程才能获取并执行
+	2.sleep()方法执行后进入的是阻塞状态，而yield()方法执行后是进入就绪状态
+	3.sleep()方法会跑出 InterruptedException异常(请求中断该线程的异常)，而yield()方法不会抛出异常
+
+
+
+java中的乐观锁和悲观锁：是一种
+	悲观锁：拿到资源时会把该资源锁住，其他想要访问该资源得线程就会处于阻塞状态  都是在操作之前就上锁 实现方法有:synchronized
+		
+
+	乐观锁：读取并不会上锁，但是会在对数据进行操作时判断当前数据是否被修改过，一般实现方法有：版本号控制 和 CAS实现
+		CAS:compare and swap的缩写  非阻塞同步 
+			内存位置（V）、预期原值（A）和新值(B)。如果内存地址里面的值和A的值是一样的，那么就将内存里面的值更新成B。
+			CAS是通过无限循环来获取数据的，如果在第一轮循环中，a线程获取地址里面的值被b线程修改了，那么a线程需要自旋，到下次循环才有可能机会执行
+		CAS会造成ABA问题，即当一个线程把数据A变为B之后再变成A的话，CAS方式则会以为没有产生变化，但其实已经改变过了，此时可以通过版本号来标识，
+			java5中提供了AtomicStampedReference来解决问题
+		CAS会造成CPU的利用率变高，因为在一直循环判断的过程，如果当前线程一直没有获取状态的话，cpu资源会被一直占有。
+	
+	自旋锁 ：是指当一个线程在获取锁的时候，如果锁已经被其它线程获取，那么该线程将循环等待，然后不断的判断锁是否能够被成功获取，直到获取到锁才会退出循环。
+
+
+	重入锁：　　当某个线程请求一个被其他线程所持有的锁的时候，该线程会被阻塞(后面的读写锁先不考虑在内)，
+		    但是像synchronized这样的内置锁是可重入的，即一个线程试图获取一个已经被该线程所持有的锁，这个请求会成功。
+		    重入以为这锁的操作粒度是线程级别而不是调用级别。我们下面说到的ReentrantLock也是可重入的，
+		    而除了支持锁的重入之外，该同步组件也支持公平的和非公平的选择。
+
+lock和synchronized
+	1.lock是一个接口，synchronized是java中的一个关键字
+	2.lock发生异常时不会释放锁，所以必须在finally中释放锁(unlock)，以避免死锁的发生，
+	  synchronized在发生异常时会自动释放占有的锁，所以不会出现死锁的情况。
+	3.lock在等到锁的过程中可以用interrupt来中断等待，而synchronized只能等待锁的释放，并不能响应中断。
+	4.lock可以通过tryLock方法来得知当前线程有没有获得锁，而synchronized并不能
+	5.lock是乐观锁方式(CAS操作)，synchronized是悲观锁方式
+
+
+SpringBoot启动类上的注解是 SpringBootApplication 其内使用到的注解有：
+		@Target({ElementType.TYPE}) : 自定义所修饰的注解作用范围
+		@Retention(RetentionPolicy.RUNTIME) ：定义所修饰的注解的生命周期  
+			RetentionPolicy包含SOURCE、CLASS、RUNTIME
+				SOURCE：只保留在源文件，当Java文件编译成class文件的时候，注解被遗弃。	
+				CLASS： 保留到class文件，但jvm加载class文件时候被遗弃，默认的
+				RUNTIME：保存到class文件中，jvm加载class文件之后也存在
+		@Documented：用来标注生成javadoc的时候是否会被记录。
+		@Inherited： 子类会继承父类的被 @Inherited 修饰过的注解
+		@SpringBootConfiguration： 其中只有一个核心注解 ： @Configuration 。 @SpringBootConfiguration是被SpringBoot封装的注解
+		@EnableAutoConfiguration：
+		@ComponentScan
+
+@Resource ： 根据名字注入 byName
+@Autowired:  根据类型注入 byType  有类型冲突的时候也可以利用 @Qualifier注解配合一起使用  从而达到byName和byType共同作用
+
+拦截器 过滤器 监听器：	
+	 （1）拦截器：拦截未登录、审计日志等；用户登录认证   spring拦截器 extends HandlerInterceptorAdapter 后自定义拦截
+		拦截器是属于java的反射机制:所以只能拦截实现了接口的类，而不能拦截url这种链接
+		依赖于web框架,在SpringMVC中就是依赖于SpringMVC框架。
+		在实现上基于Java的反射机制，属于面向切面编程（AOP）的一种运用。
+
+	 （2）过滤器：设置字符编码、URL级别的权限访问控制、过滤敏感词汇、压缩响应信息等；
+	 	 依赖于servlet容器，在实现上基于函数回调，
+		 过滤器只需要实现javax.servlet.filter，重写doFilter(...)、init(...)和destroy(..)方法即可 
+
+
+拦截器和过滤器的区别：
+	拦截器是属于java的反射机制，而过滤则是属于函数回调
+	拦截器不依赖servlet容器，过滤器依赖于servlet容器
+	拦截器只对Action起作用，过滤器可以对所有请求起作用
+	拦截器可以访问Action上下文和值栈中的对象，过滤器不能
+	在Action的生命周期中，拦截器可以多次调用，而过滤器只能在容器初始化时调用一次。
+
+ 
+	 （3）监听器：统计在线人数、清除过期session。  继承 EventListener类   
+		 感知到包括request(请求域)，session(会话域)和application(应用程序)的初始化和属性的变化；
+		 监听器接口分三类：ServletContext，HttpSession，ServletRequest。
+		 	implements  ServletRequestAttributeListener实现此接口即可监听Request中的变化
+				当servlet请求中新增，删除，更新之后会分别调用其中的方法
+			implements  HttpSessionAttributeListener
+				当Session请求中新增，删除，更新之后会分别调用其中的方法
+
+redis 增加命名空间的命令： 命名空间名字:key   如果使用两个 命名空间名字::key  则会在此 命名空间名字 下再创建一个无名字的文件夹，然后在存有 命名空间名字:key
+redis持久化的方法：RDB是将进程数据写入文件，AOF是
+	RDB文件是经过压缩的二进制文件
+	1.RDB(redis database)--是将当前进程中的数据生成快照保存到硬盘(快照持久化)，保存的文件后缀名叫rdb。可以手动触发和自动触发
+		自动触发：save m n 指定当m秒内发生n次变化时，触发bgsave  save m n的实现原理-->通过serverCorn函数、drity计数器和lastsave时间戳来实现的。
+			serverCorn函数:是一个定时操作函数
+			drity计数器：记录redis进行了多少次修改
+			lastsave时间戳：记录上次成功执行的时间
+		手动触发：执行save命令和bgsave命令
+			当save命令执行时，Rdeis服务器会被阻塞，并且不能处理任何命令请求，直到RDB文件创建完毕为止，
+			bgsave是一个子进程不会影响父进程的请求处理
+
+		主从复制的情况下，主节点会执行bgsave命令，并将rdb文件发送给从节点，从而达到全量复制
+		执行shutdown命令的时候也会自动执行rdb持久化，也会自动执行bgsave命令
+
+
+	2.AOP(Append Only File)--是将Redis每次执行的写命令记录到单独的日志文件中，当Redis重启时，再次执行AOF文件中的命令来恢复数据，有更好的实时性
+		开启需要在配置文件中配置 appendonly yes
+		由于需要记录的是Redis的每条写命令，因为AOF不需要触发，
+		对于AOF持久化，Redis是先将写命令追加到缓冲区，而不是直接写入文件，是为了避免每次有写命令的时候都直接写入硬盘，从而导致硬盘IO过大
+		AOF缓冲区的同步文件策略涉及 系统的write函数和fsync函数(此函数的作用是强制操作系统立即将缓冲区的数据写入到硬盘中，从而确保数据的安全性)
+			redis的配置有always  no  everysec. 默认设置为 everysec 每秒调用一次fsync方法  是默认的配置
+
+
+
+
+往硬盘写数据是都会带来IO压力
+
+当AOF开启时，Redis启动时就会优先加载AOF文件来恢复数据，AOF关闭时，则会载入RDB文件来恢复数据
+
+---两者相比较，RDB因为文件紧凑，体积小，传输快，且适合全量复制，恢复速度比AOF快，对性能的影响比较小，缺点在于做不到实时持久化，且兼容性差，因需要满足特定格式
+	       AOF的有点在于支持秒级持久化，兼容性好，缺点在于文件体积大，恢复起来速度比较慢，对性能的影响比较大
+
+
+
+在Redis集群，主从复制的情况下，一般对于主服务器完全关闭持久化，这样可以让redis的性能达到最佳。
+			从服务器一般开启秒级AOF级持久化，(从节点开启数据持久化的原因在于防止主从服务器同时宕机)
+			master误重启：当master因故宕机时，如果系统中存在自动拉起机制(即检测到服务停止后重启该服务)，
+				当master重启时，由于master服务器并没有持久化文件，master的数据就会变为空，slave同步数据之后，slave也会被情况数据，此时
+				如果主从服务器都没做持久化的话，就会面临数据完全丢失，所以应尽量避免"自动拉起机制"和"不做持久化"同时出现
+
+阻塞式IO：一直等待数据，会一直阻塞在IO方法
+非阻塞式IO:一直循环去询问数据，并不会阻塞在IO方法
+多路复用IO：一个线程不断去轮询每个Socket的状态，处理完之后继续轮询
+信号驱动IO：
+异步IO：
+
+redis速度快的原因：
+	1.Redis是内存数据库，直接将数据存在内存中，读写不会受到硬盘IO的限制
+	2.Redis是单线程的，不会存在各种锁问题而导致的性能消耗
+	3.redis使用的是IO多路复用技术，非阻塞式IO采用epoll技术(只关心活跃的链接)：  多路--多个网络连接、复用--复用同一个线程
+        epoll技术:提供三个函数 epoll_create(创建句柄),epoll_ctl(注册要监听的时间类型),epoll_wait(等待时间的产生)
+
+view:Sql视图相当于一个虚拟表
+	1.可以根据需求定制出一个虚拟的数据表
+	2.可以简化操作，因为已经把复杂的SQL封装了
+	3.安全性很好，因为使用的是虚拟表，基础表中的数据就是安全的，不会被操作，而且视图中的数据是跟随基础表的变化而变化的
+    视图的缺点：性能会比SQL差，对于视图来说修改数据不方便。因为必须转化为对基本表的操作。
+
+	简单视图：没有有group by或者组函数
+	复杂视图：有group by或者组函数         只能用来查询
+	创建视图：create or replace 视图名字   (v_......) as  select * from 表名
+
+	调用该试图就相当于as后面的sql语句
+	可以通过修改简单视图改变原来表中的数据（增删改都可以）
+	可以对简单视图进行权限设定  可以设置成 只读  wIth read only
+	With check option      只能在视图里面操作你能读到的数据
+
+
+
+
+项目实战部分：
+	当遇到一个项目中确认遇到问题。且确定到了是某一个类的某个具体方法上的正确做法，
+	我们应该去编写一个子类实现该类，并重写并根据需求把该方法调试完毕，然后把出错接口中调用父类的方法执行我们重新编写的子类
+	不直接该父类方法的原因是，如果其他接口也调用了其父类该方法并且没有出错的话，就不需要修改，也就不会有所影响了。
+
+
+缓存穿透：
+	利用nginx代理器去做
+	同时有多个缓存和数据库中均不存在的请求访问，此种情况下，缓存和数据库中就均查不到，这种恶意场景就会对数据库造成很大压力
+		eg:数据库id全是正数，而黑客同时发送的多条请求id全为负数
+	解决办法：1.布隆过滤器，将所有可能存在的数据哈希到一个足够大的bitmap中，当出现不存在于bitmap中的请求时则拦截掉
+		  2.如果一个查询返回的结果是空(不管是数据不存在亦或者是系统故障的原因)，仍把这个空结果进行缓存，但把这个的过期时间设置的很短，几分钟而已
+
+缓存击穿：
+	是指一个key非常热点，在不停的扛着大并发，大并发集中对这一个点进行访问，当这个key在失效的瞬间，
+	持续的大并发就穿破缓存，直接请求数据库，就像在一个屏障上凿开了一个洞。
+	解决方案：缓存击穿的话，设置热点数据永远不过期。或者加上互斥锁就能搞定了
+
+缓存雪崩：
+	是指在某一个时间段，缓存集中过期失效。
+	解决方法：1.比如某些热点数据可以设置永不过期。
+	            一种是实际意义上的用不过期，一种是在值中设置下次过期时间
+
+		  2.用到过期时间的key，时间全部错开,保证数据不会在同一时间大面积失效。如果Redis是集群部署，将热点数据均匀分布在不同的Redis库中也能避免全部失效的问题。
+		  3.多缓存结合，Redis结合ehcache或者memcached，先查redis再查memcached。
+
+
+Sql:
+  mysql:
+    Innodb引擎：擅长更新删除(插入时会排序)、并发处理、表级锁和行级锁都支持、每个表都有独立的表空间，索引和数据都存储在各自独立的表空间中
+    myisam引擎：擅长查询插入(插入时不会排序)、数据和索引分开存放、只支持数据库表级锁定，不支持高并发
+
+  sql优化：
+    1.索引--  唯一索引  联合索引
+        order by语句也可以通过索引来优化
+           唯一索引--> select .. from table order by [sortName] -->(sort)索引
+           联合索引--> select .. from table where columnName = [value] order by [sortName] --> (columnName,sortName)联合索引
+           当where加多字段的order by建立索引时where后的字段在前在后的优化效果好的多  当有where条件时单独索引并不能优化排序。
+            eg:(whereName,orderName1,orderName2....)比(orderName1,orderName2....,whereName)好很多
+           当where和orderBy后的条件带函数时，无法利用索引来达到排序优化
+        ***注：mysql一次查询只能用到一个索引，当要对多字段使用索引时，要建立复合索引
+               --orderBy操作中，mysql只有在排序条件不是一个表达式(函数)的情况下才会使用到索引
+    B+树：是多路查找二叉树,非叶子节点相当于叶子节点的索引，叶子节点存放所有的数据，到叶子节点才算命中
+
